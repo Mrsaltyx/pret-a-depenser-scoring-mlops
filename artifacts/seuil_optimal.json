@@ -1,0 +1,9 @@
+{
+  "seuil_optimal_oof": 0.45,
+  "cout_metier_oof": 120791,
+  "cout_metier_holdout_au_seuil_oof": 29591,
+  "seuil_optimal_holdout_a_posteriori": 0.48,
+  "cout_min_holdout_a_posteriori": 29514,
+  "cout_fn": 10,
+  "cout_fp": 1
+}

@@ -1,0 +1,15 @@
+{
+  "best_params": {
+    "num_leaves": 91,
+    "learning_rate": 0.017398074711291726,
+    "n_estimators": 800,
+    "min_child_samples": 160,
+    "subsample": 0.9757995766256756,
+    "colsample_bytree": 0.9579309401710595,
+    "reg_alpha": 0.24637685958997463,
+    "reg_lambda": 4.869640941520899
+  },
+  "best_cout_metier_cv": 40448.0,
+  "scale_pos_weight": 11.38710976837865,
+  "n_trials": 8
+}

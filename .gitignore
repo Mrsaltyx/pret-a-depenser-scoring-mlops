@@ -2,7 +2,6 @@
 data/
 Projet+Mise+en+prod+-+home-credit-default-risk/
 *.parquet
-*.csv
 
 # MLflow local (artefacts volumineux, régénérables)
 mlruns/
