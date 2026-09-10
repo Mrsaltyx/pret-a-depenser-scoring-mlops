@@ -1,0 +1,29 @@
+# Données (jamais de données sensibles dans Git)
+data/
+Projet+Mise+en+prod+-+home-credit-default-risk/
+*.parquet
+*.csv
+
+# MLflow local (artefacts volumineux, régénérables)
+mlruns/
+mlartifacts/
+mlflow.db
+*.log
+
+# Logs et stockage de production (runtime)
+monitoring/data/
+prod_logs.db
+*.jsonl
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.egg-info/
+
+# Divers
+.DS_Store
+Thumbs.db
+_archive/
+docs/screenshots/
