@@ -1,0 +1,81 @@
+PROFILING cProfile — chemin d'inférence API « Prêt à dépenser »
+Chemin profilé : construction DataFrame 1 ligne (dict JSON) + coercion pandas + predict_proba
+Itérations : 200 | Temps total : 17.660 s | Temps moyen par appel : 88.298 ms
+==============================================================================
+
+Top 20 des fonctions par temps CUMULÉ :
+
+         38447085 function calls (37044671 primitive calls) in 17.657 seconds
+
+   Ordered by: cumulative time
+   List reduced from 443 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      200    0.013    0.000   17.657    0.088 C:\Users\Salty\Downloads\Initiez_vous_MLOPS _2\optimization\profile_inference.py:134(chemin_api)
+      200    0.001    0.000   14.832    0.074 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\frame.py:12188(apply)
+      200    0.064    0.000   14.827    0.074 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:963(apply)
+      200    0.001    0.000   14.762    0.074 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1165(apply_standard)
+      200    0.171    0.001    8.845    0.044 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1174(apply_series_generator)
+      400    0.003    0.000    7.633    0.019 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\frame.py:702(__init__)
+      400    0.004    0.000    6.431    0.016 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:96(arrays_to_mgr)
+      200    0.001    0.000    5.916    0.030 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1204(wrap_results)
+      200    0.002    0.000    5.912    0.030 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1299(wrap_results_for_axis)
+      200    0.089    0.000    5.905    0.030 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:375(dict_to_mgr)
+      400    0.257    0.001    3.930    0.010 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:553(_homogenize)
+    80400    0.280    0.000    3.879    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\tools\numeric.py:50(to_numeric)
+   161000    0.160    0.000    3.790    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\generic.py:6560(copy)
+    81000    0.403    0.000    2.944    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\series.py:369(__init__)
+    80600    0.036    0.000    2.628    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1241(<genexpr>)
+    80400    0.057    0.000    2.592    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\frame.py:4292(_ixs)
+    80600    0.149    0.000    2.452    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\generic.py:5201(reindex)
+    80400    0.059    0.000    2.443    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\series.py:5299(reindex)
+8079008/7436008    1.357    0.000    2.429    0.000 {built-in method builtins.isinstance}
+   161200    0.188    0.000    2.095    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\managers.py:718(copy)
+
+
+
+==============================================================================
+
+Top 20 des fonctions par temps PROPRE (tottime) :
+
+         38447085 function calls (37044671 primitive calls) in 17.657 seconds
+
+   Ordered by: internal time
+   List reduced from 443 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+8079008/7436008    1.357    0.000    2.429    0.000 {built-in method builtins.isinstance}
+   242000    1.090    0.000    1.417    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\generic.py:6131(__finalize__)
+   402800    0.825    0.000    1.169    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\generic.py:6208(__setattr__)
+   161800    0.538    0.000    1.653    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\construction.py:531(sanitize_array)
+  1373800    0.478    0.000    1.071    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\dtypes\generic.py:43(_instancecheck)
+    81000    0.403    0.000    2.944    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\series.py:369(__init__)
+2289601/1633401    0.389    0.000    0.531    0.000 {built-in method builtins.len}
+   161200    0.383    0.000    1.477    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\managers.py:396(apply)
+   323000    0.377    0.000    0.488    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\generic.py:258(__init__)
+   483400    0.374    0.000    0.634    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\indexes\range.py:236(_simple_new)
+  2354600    0.364    0.000    0.459    0.000 {built-in method builtins.getattr}
+  1373800    0.338    0.000    0.509    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\dtypes\generic.py:38(_check)
+    80400    0.293    0.000    0.413    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\arrays\arrow\array.py:722(__getitem__)
+    80400    0.280    0.000    3.879    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\tools\numeric.py:50(to_numeric)
+    80400    0.270    0.000    0.435    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:999(convert)
+   241800    0.262    0.000    0.262    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\arrays\arrow\array.py:819(__iter__)
+      400    0.257    0.001    3.930    0.010 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:553(_homogenize)
+    80400    0.257    0.000    0.555    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\managers.py:1205(iget)
+   483000    0.255    0.000    0.888    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\indexes\range.py:620(_view)
+   403600    0.225    0.000    1.023    0.000 C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\indexes\base.py:1033(view)
+
+
+
+==============================================================================
+
+GOULOTS D'ÉTRANGLEMENT IDENTIFIÉS :
+
+  - C:\Users\Salty\Downloads\Initiez_vous_MLOPS _2\optimization\profile_inference.py:134(chemin_api) : 100.0 % du temps cumulé (200 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\frame.py:12188(apply) : 84.0 % du temps cumulé (200 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:963(apply) : 84.0 % du temps cumulé (200 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1165(apply_standard) : 83.6 % du temps cumulé (200 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1174(apply_series_generator) : 50.1 % du temps cumulé (200 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\frame.py:702(__init__) : 43.2 % du temps cumulé (400 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\internals\construction.py:96(arrays_to_mgr) : 36.4 % du temps cumulé (400 appels)
+  - C:\Users\Salty\AppData\Roaming\kimi-desktop\daimon-share\daimon\runtime\python\.venv\Lib\site-packages\pandas\core\apply.py:1204(wrap_results) : 33.5 % du temps cumulé (200 appels)

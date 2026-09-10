@@ -1,0 +1,30 @@
+# Données (jamais embarquées dans l'image)
+data/
+*.parquet
+
+# MLflow local (artefacts volumineux, régénérables)
+mlruns/
+mlartifacts/
+mlflow.db
+*.log
+
+# Logs de production (créés au runtime, montés en volume)
+monitoring/data/
+
+# Tests et documentation (inutiles en production)
+tests/
+docs/
+*.pdf
+*.url
+JOURNAL_ACTIONS.md
+
+# Historique Git et divers
+.git/
+.gitignore
+_archive/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store
+Thumbs.db

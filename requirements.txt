@@ -1,3 +1,4 @@
+# --- Modélisation (Partie 1) ---
 pandas==3.0.2
 numpy==2.4.4
 scikit-learn==1.9.0
@@ -8,3 +9,18 @@ shap==0.52.0
 matplotlib
 seaborn
 pyarrow
+
+# --- Serving API (Partie 2) ---
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+skops==0.14.0
+onnxruntime==1.29.0
+
+# --- Dashboard et monitoring (Partie 2) ---
+streamlit==1.63.0
+evidently==0.7.21
+psutil
+
+# --- Tests ---
+httpx==0.28.1
+pytest==9.1.1

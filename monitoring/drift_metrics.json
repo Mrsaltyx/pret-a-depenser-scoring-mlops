@@ -1,0 +1,393 @@
+{
+  "date_analyse_utc": "2026-09-10T15:33:10.335614+00:00",
+  "reference": {
+    "source": "data/processed/train.parquet",
+    "nb_lignes": 5000
+  },
+  "production": {
+    "source": "monitoring/data/prod_logs.db (http_status=200)",
+    "nb_requetes_valides": 1900,
+    "nb_periode1": 1140,
+    "nb_periode2": 760
+  },
+  "seuil_metier": 0.45,
+  "ref_vs_prod_globale": {
+    "fichier_html": "drift_report.html",
+    "features": {
+      "EXT_SOURCE_3": {
+        "drift_score": 0.201907,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "EXT_SOURCE_2": {
+        "drift_score": 0.147861,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "EXT_SOURCE_1": {
+        "drift_score": 0.050977,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "CREDIT_TERM": {
+        "drift_score": 0.566068,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_EMPLOYED": {
+        "drift_score": 28.937332,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_BIRTH": {
+        "drift_score": 0.064808,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_ANNUITY": {
+        "drift_score": 0.130224,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_DAYS_CREDIT_MAX": {
+        "drift_score": 0.056784,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_DAYS_LATE_MAX": {
+        "drift_score": 0.043358,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "POS_CNT_INSTALMENT_FUTURE_MEAN": {
+        "drift_score": 0.044423,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "OWN_CAR_AGE": {
+        "drift_score": 0.060766,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_AMT_PAYMENT_SUM": {
+        "drift_score": 0.131903,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_AMT_PAYMENT_MIN": {
+        "drift_score": 0.026339,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "PREV_AMT_DOWN_PAYMENT_MAX": {
+        "drift_score": 0.032147,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_PAYMENT_DIFF_MEAN": {
+        "drift_score": 0.057193,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_GOODS_PRICE": {
+        "drift_score": 0.222194,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_EMPLOYED_PERCENT": {
+        "drift_score": 0.097799,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_DAYS_CREDIT_ENDDATE_MAX": {
+        "drift_score": 0.111089,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_CREDIT": {
+        "drift_score": 0.099356,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_ID_PUBLISH": {
+        "drift_score": 0.118809,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_DAYS_LATE_SUM": {
+        "drift_score": 0.120036,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "PREV_CNT_PAYMENT_MEAN": {
+        "drift_score": 0.038782,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "ANNUITY_INCOME_PERCENT": {
+        "drift_score": 0.042484,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_AMT_CREDIT_SUM_DEBT_MEAN": {
+        "drift_score": 0.034544,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_DAYS_ENDDATE_FACT_MAX": {
+        "drift_score": 0.057117,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "CODE_GENDER_F": {
+        "drift_score": 0.005053,
+        "statut_drift": false,
+        "methode": "Jensen-Shannon distance"
+      },
+      "POS_COUNT": {
+        "drift_score": 0.087069,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "CC_CNT_DRAWINGS_CURRENT_MEAN": {
+        "drift_score": 0.059382,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "NAME_EDUCATION_TYPE_Higher_education": {
+        "drift_score": 0.00942,
+        "statut_drift": false,
+        "methode": "Jensen-Shannon distance"
+      },
+      "INST_DAYS_LATE_MEAN": {
+        "drift_score": 0.057822,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_INCOME_TOTAL": {
+        "drift_score": 0.046755,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      }
+    },
+    "nb_features_driftees": 10,
+    "nb_features_total": 31
+  },
+  "periode1_vs_periode2": {
+    "fichier_html": "drift_report_periodes.html",
+    "colonnes": {
+      "EXT_SOURCE_3": {
+        "drift_score": 0.02628,
+        "statut_drift": true,
+        "methode": "K-S p_value"
+      },
+      "EXT_SOURCE_2": {
+        "drift_score": 0.43586,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "EXT_SOURCE_1": {
+        "drift_score": 0.524152,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "CREDIT_TERM": {
+        "drift_score": 0.048729,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_EMPLOYED": {
+        "drift_score": 0.032775,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_BIRTH": {
+        "drift_score": 0.310424,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_ANNUITY": {
+        "drift_score": 0.079259,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_DAYS_CREDIT_MAX": {
+        "drift_score": 0.063306,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "INST_DAYS_LATE_MAX": {
+        "drift_score": 0.09954,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "POS_CNT_INSTALMENT_FUTURE_MEAN": {
+        "drift_score": 0.091411,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "OWN_CAR_AGE": {
+        "drift_score": 0.999989,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "INST_AMT_PAYMENT_SUM": {
+        "drift_score": 0.055054,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_AMT_PAYMENT_MIN": {
+        "drift_score": 0.08227,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "PREV_AMT_DOWN_PAYMENT_MAX": {
+        "drift_score": 0.040424,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_PAYMENT_DIFF_MEAN": {
+        "drift_score": 0.082477,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_GOODS_PRICE": {
+        "drift_score": 0.08977,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_EMPLOYED_PERCENT": {
+        "drift_score": 0.240311,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "BUREAU_DAYS_CREDIT_ENDDATE_MAX": {
+        "drift_score": 0.530503,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "AMT_CREDIT": {
+        "drift_score": 0.455824,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "DAYS_ID_PUBLISH": {
+        "drift_score": 0.031397,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "INST_DAYS_LATE_SUM": {
+        "drift_score": 0.088533,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "PREV_CNT_PAYMENT_MEAN": {
+        "drift_score": 0.039756,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "ANNUITY_INCOME_PERCENT": {
+        "drift_score": 0.074228,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "BUREAU_AMT_CREDIT_SUM_DEBT_MEAN": {
+        "drift_score": 0.380254,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "BUREAU_DAYS_ENDDATE_FACT_MAX": {
+        "drift_score": 0.063415,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "CODE_GENDER_F": {
+        "drift_score": 0.005246,
+        "statut_drift": false,
+        "methode": "Jensen-Shannon distance"
+      },
+      "POS_COUNT": {
+        "drift_score": 0.07207,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "CC_CNT_DRAWINGS_CURRENT_MEAN": {
+        "drift_score": 0.359172,
+        "statut_drift": false,
+        "methode": "K-S p_value"
+      },
+      "NAME_EDUCATION_TYPE_Higher_education": {
+        "drift_score": 0.025918,
+        "statut_drift": false,
+        "methode": "Jensen-Shannon distance"
+      },
+      "INST_DAYS_LATE_MEAN": {
+        "drift_score": 0.067317,
+        "statut_drift": false,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "AMT_INCOME_TOTAL": {
+        "drift_score": 0.30163,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      },
+      "score": {
+        "drift_score": 0.217197,
+        "statut_drift": true,
+        "methode": "Wasserstein distance (normed)"
+      }
+    },
+    "nb_colonnes_driftees": 6,
+    "nb_colonnes_total": 32,
+    "drift_score_modele": {
+      "drift_score": 0.217197,
+      "statut_drift": true,
+      "methode": "Wasserstein distance (normed)"
+    }
+  },
+  "features_shiftées_attendues": [
+    "AMT_CREDIT",
+    "AMT_INCOME_TOTAL",
+    "EXT_SOURCE_2",
+    "EXT_SOURCE_3",
+    "DAYS_BIRTH"
+  ],
+  "validation_derive_injectee": {
+    "AMT_CREDIT": {
+      "detectee_p1_vs_p2": true,
+      "detectee_ref_vs_prod": false
+    },
+    "AMT_INCOME_TOTAL": {
+      "detectee_p1_vs_p2": true,
+      "detectee_ref_vs_prod": false
+    },
+    "EXT_SOURCE_2": {
+      "detectee_p1_vs_p2": true,
+      "detectee_ref_vs_prod": true
+    },
+    "EXT_SOURCE_3": {
+      "detectee_p1_vs_p2": true,
+      "detectee_ref_vs_prod": true
+    },
+    "DAYS_BIRTH": {
+      "detectee_p1_vs_p2": true,
+      "detectee_ref_vs_prod": false
+    }
+  },
+  "nb_features_shiftees_retrouvees": 5,
+  "conclusion": "10/31 features en dérive entre la référence d'entraînement et la production globale ; 6/32 colonnes (features + score) en dérive entre la période 1 et la période 2. 5/5 features artificiellement shiftées retrouvées par la comparaison période 1 vs période 2.",
+  "metriques_operationnelles": {
+    "nb_requetes_total": 2000,
+    "nb_succes_200": 1900,
+    "nb_erreurs_422": 100,
+    "taux_erreur_pct": 5.0,
+    "latence_moyenne_ms": 0.32,
+    "latence_p95_ms": 0.44,
+    "score_moyen": 0.3364,
+    "pct_refuses": 30.47,
+    "decisions": {
+      "accorde": 1321,
+      "refuse": 579
+    }
+  }
+}

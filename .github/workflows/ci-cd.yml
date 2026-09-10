@@ -1,0 +1,140 @@
+# Pipeline CI/CD de l'API de scoring « Prêt à dépenser ».
+#
+# Trois jobs enchaînés :
+#   1. test         : installe les dépendances et exécute la suite pytest ;
+#   2. docker-build : construit l'image Docker de l'API (seulement si les
+#                     tests passent) ;
+#   3. deploy       : sur la branche main uniquement, déploie l'image et
+#                     vérifie le service par un smoke test (/health + /predict).
+name: CI/CD — API Prêt à dépenser
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ------------------------------------------------------------------
+  # Job 1 : tests automatisés
+  # ------------------------------------------------------------------
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Récupération du code du dépôt.
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      # Python 3.12, aligné sur l'image Docker de production.
+      - name: Installation de Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # Dépendances de serving + outils de test.
+      - name: Installation des dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-api.txt
+          pip install pytest httpx
+
+      # Suite de tests : API, validation métier, comportement du modèle.
+      - name: Exécution des tests pytest
+        run: python -m pytest tests/ -v
+
+  # ------------------------------------------------------------------
+  # Job 2 : construction de l'image Docker (bloqué si les tests échouent)
+  # ------------------------------------------------------------------
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      # Build de l'image, taguée avec le SHA du commit pour la traçabilité.
+      - name: Construction de l'image Docker
+        run: docker build -t pret-a-depenser-api:${{ github.sha }} .
+
+      # Vérification que l'image contient bien l'application et le modèle.
+      - name: Inspection de l'image construite
+        run: |
+          docker image inspect pret-a-depenser-api:${{ github.sha }} \
+            --format 'Image OK : {{ .Id }} ({{ .Size }} octets)'
+
+  # ------------------------------------------------------------------
+  # Job 3 : déploiement (branche main uniquement)
+  # ------------------------------------------------------------------
+  deploy:
+    needs: docker-build
+    # On ne déploie que sur push vers main (jamais sur une Pull Request).
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      # Reconstruction locale de l'image pour ce runner de déploiement.
+      # NOTE : dans un vrai pipeline, on pousserait l'image vers un registry
+      # (ex. GitHub Container Registry) au job docker-build :
+      #   docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+      #   docker tag pret-a-depenser-api:${{ github.sha }} ghcr.io/<org>/pret-a-depenser-api:${{ github.sha }}
+      #   docker push ghcr.io/<org>/pret-a-depenser-api:${{ github.sha }}
+      # puis on la tirerait ici (docker pull). Les identifiants du registry
+      # doivent être stockés dans les secrets du dépôt (Settings > Secrets),
+      # par ex. secrets.REGISTRY_USER / secrets.REGISTRY_TOKEN.
+      - name: Préparation de l'image de déploiement
+        run: docker build -t pret-a-depenser-api:${{ github.sha }} .
+
+      # Lancement du conteneur en mode détaché sur le port 8000.
+      - name: Démarrage du conteneur
+        run: |
+          docker run -d --name api-pret-a-depenser \
+            -p 8000:8000 pret-a-depenser-api:${{ github.sha }}
+
+      # Attente que l'API soit prête (le modèle met quelques secondes à charger).
+      - name: Attente du démarrage de l'API
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health > /dev/null 2>&1; then
+              echo "API prête après ${i} s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "L'API n'a pas démarré dans le délai imparti"
+          docker logs api-pret-a-depenser
+          exit 1
+
+      # Smoke test 1 : le healthcheck doit répondre "ok".
+      - name: Smoke test — GET /health
+        run: curl -fsS http://localhost:8000/health
+
+      # Smoke test 2 : une prédiction minimale valide doit retourner 200.
+      - name: Smoke test — POST /predict
+        run: |
+          curl -fsS -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{
+              "AMT_INCOME_TOTAL": 157500.0,
+              "AMT_CREDIT": 770292.0,
+              "AMT_ANNUITY": 30676.5,
+              "DAYS_BIRTH": -13506,
+              "DAYS_EMPLOYED": -105,
+              "CNT_CHILDREN": 1,
+              "EXT_SOURCE_2": 0.594,
+              "EXT_SOURCE_3": 0.428
+            }'
+
+      # Journal du conteneur pour diagnostic en cas de souci.
+      - name: Logs du conteneur déployé
+        run: docker logs api-pret-a-depenser
+
+      # Nettoyage systématique, même en cas d'échec d'un smoke test.
+      - name: Arrêt et suppression du conteneur
+        if: always()
+        run: |
+          docker stop api-pret-a-depenser || true
+          docker rm api-pret-a-depenser || true

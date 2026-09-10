@@ -1,0 +1,415 @@
+{
+  "machine": {
+    "systeme": "Windows-11-10.0.26200-SP0",
+    "processeur": "AMD64 Family 26 Model 112 Stepping 0, AuthenticAMD",
+    "coeurs_physiques": 16,
+    "coeurs_logiques": 32,
+    "ram_totale_go": 34.0,
+    "python": "3.12.14"
+  },
+  "modele": {
+    "type": "LGBMClassifier",
+    "n_estimators": 800,
+    "n_features": 402,
+    "taille_fichier_skops_mo": 8.271,
+    "rss_avant_chargement_mo": 632.4,
+    "rss_apres_chargement_mo": 643.2,
+    "delta_rss_chargement_mo": 10.8
+  },
+  "profiling": {
+    "nb_iterations": 200,
+    "temps_total_s": 17.66,
+    "temps_moyen_par_appel_ms": 88.298,
+    "top_fonctions_temps_cumule": [
+      {
+        "fonction": "C:\\Users\\Salty\\Downloads\\Initiez_vous_MLOPS _2\\optimization\\profile_inference.py:134(chemin_api)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0127,
+        "temps_cumule_s": 17.6572,
+        "pct_temps_total": 100.0
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\frame.py:12188(apply)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0011,
+        "temps_cumule_s": 14.832,
+        "pct_temps_total": 84.0
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\apply.py:963(apply)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0643,
+        "temps_cumule_s": 14.8271,
+        "pct_temps_total": 84.0
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\apply.py:1165(apply_standard)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0006,
+        "temps_cumule_s": 14.7615,
+        "pct_temps_total": 83.6
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\apply.py:1174(apply_series_generator)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.1705,
+        "temps_cumule_s": 8.8447,
+        "pct_temps_total": 50.1
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\frame.py:702(__init__)",
+        "nb_appels": 400,
+        "temps_propre_s": 0.0034,
+        "temps_cumule_s": 7.6331,
+        "pct_temps_total": 43.2
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\internals\\construction.py:96(arrays_to_mgr)",
+        "nb_appels": 400,
+        "temps_propre_s": 0.0036,
+        "temps_cumule_s": 6.4311,
+        "pct_temps_total": 36.4
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\apply.py:1204(wrap_results)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.001,
+        "temps_cumule_s": 5.9163,
+        "pct_temps_total": 33.5
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\apply.py:1299(wrap_results_for_axis)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0017,
+        "temps_cumule_s": 5.9124,
+        "pct_temps_total": 33.5
+      },
+      {
+        "fonction": "C:\\Users\\Salty\\AppData\\Roaming\\kimi-desktop\\daimon-share\\daimon\\runtime\\python\\.venv\\Lib\\site-packages\\pandas\\core\\internals\\construction.py:375(dict_to_mgr)",
+        "nb_appels": 200,
+        "temps_propre_s": 0.0891,
+        "temps_cumule_s": 5.9051,
+        "pct_temps_total": 33.4
+      }
+    ],
+    "fichier": "cprofile_report.txt"
+  },
+  "latence_1_ligne": {
+    "sklearn_predict_proba": {
+      "mediane_ms": 3.1353,
+      "p95_ms": 3.4842,
+      "moyenne_ms": 3.1402,
+      "min_ms": 2.6783,
+      "max_ms": 4.8069,
+      "n_repetitions": 50
+    },
+    "booster_predict": {
+      "mediane_ms": 0.1365,
+      "p95_ms": 0.1458,
+      "moyenne_ms": 0.1382,
+      "min_ms": 0.1337,
+      "max_ms": 0.1613,
+      "n_repetitions": 50
+    }
+  },
+  "parite_sklearn_vs_booster": {
+    "n_lignes": 1000,
+    "max_abs_diff": 0.0,
+    "identique": true
+  },
+  "effet_parallelisme": {
+    "1": {
+      "sklearn_n_jobs_1": {
+        "mediane_ms": 1.5168,
+        "p95_ms": 1.6338,
+        "moyenne_ms": 1.5237,
+        "min_ms": 1.453,
+        "max_ms": 1.6575,
+        "n_repetitions": 50
+      },
+      "sklearn_n_jobs_-1": {
+        "mediane_ms": 3.1463,
+        "p95_ms": 6.3328,
+        "moyenne_ms": 3.6634,
+        "min_ms": 2.524,
+        "max_ms": 6.5483,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_1": {
+        "mediane_ms": 0.0732,
+        "p95_ms": 0.1201,
+        "moyenne_ms": 0.0802,
+        "min_ms": 0.0691,
+        "max_ms": 0.1962,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_-1": {
+        "mediane_ms": 0.1186,
+        "p95_ms": 0.1313,
+        "moyenne_ms": 0.1194,
+        "min_ms": 0.1158,
+        "max_ms": 0.1342,
+        "n_repetitions": 50
+      }
+    },
+    "100": {
+      "sklearn_n_jobs_1": {
+        "mediane_ms": 11.7945,
+        "p95_ms": 12.2181,
+        "moyenne_ms": 11.8123,
+        "min_ms": 11.317,
+        "max_ms": 13.6833,
+        "n_repetitions": 50
+      },
+      "sklearn_n_jobs_-1": {
+        "mediane_ms": 4.5006,
+        "p95_ms": 5.5341,
+        "moyenne_ms": 4.6476,
+        "min_ms": 4.251,
+        "max_ms": 6.111,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_1": {
+        "mediane_ms": 10.1319,
+        "p95_ms": 10.575,
+        "moyenne_ms": 10.1763,
+        "min_ms": 9.7462,
+        "max_ms": 11.2397,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_-1": {
+        "mediane_ms": 5.4355,
+        "p95_ms": 9.8127,
+        "moyenne_ms": 5.2176,
+        "min_ms": 1.6176,
+        "max_ms": 11.5865,
+        "n_repetitions": 50
+      }
+    },
+    "1000": {
+      "sklearn_n_jobs_1": {
+        "mediane_ms": 103.5377,
+        "p95_ms": 105.9276,
+        "moyenne_ms": 103.8888,
+        "min_ms": 102.3349,
+        "max_ms": 107.2854,
+        "n_repetitions": 50
+      },
+      "sklearn_n_jobs_-1": {
+        "mediane_ms": 32.4947,
+        "p95_ms": 45.7093,
+        "moyenne_ms": 32.0393,
+        "min_ms": 17.6752,
+        "max_ms": 46.9855,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_1": {
+        "mediane_ms": 101.896,
+        "p95_ms": 102.8869,
+        "moyenne_ms": 101.9225,
+        "min_ms": 99.7131,
+        "max_ms": 103.609,
+        "n_repetitions": 50
+      },
+      "booster_num_threads_-1": {
+        "mediane_ms": 28.3912,
+        "p95_ms": 38.7047,
+        "moyenne_ms": 27.4768,
+        "min_ms": 14.3147,
+        "max_ms": 41.3794,
+        "n_repetitions": 50
+      }
+    }
+  },
+  "latence_par_batch": {
+    "1": {
+      "n_repetitions": 50,
+      "sklearn_total": {
+        "mediane_ms": 2.6325,
+        "p95_ms": 3.0724,
+        "moyenne_ms": 2.6463,
+        "min_ms": 2.2753,
+        "max_ms": 3.796,
+        "n_repetitions": 50
+      },
+      "sklearn_par_ligne_ms": 2.6325,
+      "booster_total": {
+        "mediane_ms": 0.1057,
+        "p95_ms": 0.2033,
+        "moyenne_ms": 0.1205,
+        "min_ms": 0.1028,
+        "max_ms": 0.3812,
+        "n_repetitions": 50
+      },
+      "booster_par_ligne_ms": 0.1057
+    },
+    "10": {
+      "n_repetitions": 50,
+      "sklearn_total": {
+        "mediane_ms": 2.8453,
+        "p95_ms": 3.3884,
+        "moyenne_ms": 2.9201,
+        "min_ms": 2.5263,
+        "max_ms": 4.133,
+        "n_repetitions": 50
+      },
+      "sklearn_par_ligne_ms": 0.2845,
+      "booster_total": {
+        "mediane_ms": 0.3911,
+        "p95_ms": 0.6344,
+        "moyenne_ms": 0.4384,
+        "min_ms": 0.34,
+        "max_ms": 0.8149,
+        "n_repetitions": 50
+      },
+      "booster_par_ligne_ms": 0.0391
+    },
+    "100": {
+      "n_repetitions": 50,
+      "sklearn_total": {
+        "mediane_ms": 6.1254,
+        "p95_ms": 8.0475,
+        "moyenne_ms": 6.2592,
+        "min_ms": 4.5491,
+        "max_ms": 9.1738,
+        "n_repetitions": 50
+      },
+      "sklearn_par_ligne_ms": 0.0613,
+      "booster_total": {
+        "mediane_ms": 1.9821,
+        "p95_ms": 2.9109,
+        "moyenne_ms": 2.0495,
+        "min_ms": 1.3459,
+        "max_ms": 3.1973,
+        "n_repetitions": 50
+      },
+      "booster_par_ligne_ms": 0.0198
+    },
+    "1000": {
+      "n_repetitions": 50,
+      "sklearn_total": {
+        "mediane_ms": 16.6085,
+        "p95_ms": 18.2036,
+        "moyenne_ms": 16.9217,
+        "min_ms": 15.8884,
+        "max_ms": 23.5399,
+        "n_repetitions": 50
+      },
+      "sklearn_par_ligne_ms": 0.0166,
+      "booster_total": {
+        "mediane_ms": 12.0059,
+        "p95_ms": 13.6678,
+        "moyenne_ms": 12.185,
+        "min_ms": 10.7557,
+        "max_ms": 17.8421,
+        "n_repetitions": 50
+      },
+      "booster_par_ligne_ms": 0.012
+    },
+    "10000": {
+      "n_repetitions": 20,
+      "sklearn_total": {
+        "mediane_ms": 82.8967,
+        "p95_ms": 89.5773,
+        "moyenne_ms": 83.071,
+        "min_ms": 77.1195,
+        "max_ms": 90.5529,
+        "n_repetitions": 20
+      },
+      "sklearn_par_ligne_ms": 0.0083,
+      "booster_total": {
+        "mediane_ms": 69.2833,
+        "p95_ms": 75.5883,
+        "moyenne_ms": 70.0179,
+        "min_ms": 67.0519,
+        "max_ms": 77.2112,
+        "n_repetitions": 20
+      },
+      "booster_par_ligne_ms": 0.0069
+    }
+  },
+  "decomposition_1_ligne": {
+    "construction_dataframe": {
+      "mediane_ms": 1.83,
+      "p95_ms": 2.335,
+      "moyenne_ms": 1.9466,
+      "min_ms": 1.733,
+      "max_ms": 4.0866,
+      "n_repetitions": 200
+    },
+    "coercion_pandas": {
+      "mediane_ms": 13.0955,
+      "p95_ms": 76.3779,
+      "moyenne_ms": 18.0699,
+      "min_ms": 12.0893,
+      "max_ms": 91.978,
+      "n_repetitions": 200
+    },
+    "predict_proba_seul": {
+      "mediane_ms": 2.3643,
+      "p95_ms": 4.6884,
+      "moyenne_ms": 2.75,
+      "min_ms": 2.2248,
+      "max_ms": 6.944,
+      "n_repetitions": 200
+    },
+    "chemin_api_complet": {
+      "mediane_ms": 31.4214,
+      "p95_ms": 95.9112,
+      "moyenne_ms": 36.1563,
+      "min_ms": 25.5772,
+      "max_ms": 104.0047,
+      "n_repetitions": 200
+    },
+    "construction_numpy_optimisee": {
+      "mediane_ms": 0.0535,
+      "p95_ms": 0.0554,
+      "moyenne_ms": 0.0538,
+      "min_ms": 0.0531,
+      "max_ms": 0.059,
+      "n_repetitions": 200
+    },
+    "chemin_api_optimise_complet": {
+      "mediane_ms": 0.1881,
+      "p95_ms": 0.1994,
+      "moyenne_ms": 0.1908,
+      "min_ms": 0.1855,
+      "max_ms": 0.261,
+      "n_repetitions": 200
+    }
+  },
+  "onnx": {
+    "conversion_reussie": true,
+    "temps_conversion_s": 2.44,
+    "taille_fichier_onnx_mo": 5.625,
+    "providers": [
+      "CPUExecutionProvider"
+    ],
+    "latence": {
+      "latence_1_ligne": {
+        "mediane_ms": 0.0156,
+        "p95_ms": 0.0171,
+        "moyenne_ms": 0.0157,
+        "min_ms": 0.0148,
+        "max_ms": 0.0179,
+        "n_repetitions": 50
+      },
+      "latence_batch_1000": {
+        "mediane_ms": 6.2688,
+        "p95_ms": 7.5592,
+        "moyenne_ms": 6.2296,
+        "min_ms": 4.769,
+        "max_ms": 8.6635,
+        "n_repetitions": 50
+      }
+    },
+    "parite_vs_sklearn": {
+      "n_lignes": 1000,
+      "max_abs_diff": 2.3189659290046016e-07,
+      "tolerance": 0.0001,
+      "parite_ok": true,
+      "decisions_seuil_045_divergentes": 0
+    },
+    "parite_booster_vs_sklearn_decisions": 0
+  }
+}

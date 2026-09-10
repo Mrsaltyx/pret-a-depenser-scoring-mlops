@@ -274,3 +274,69 @@ réentraînement sur tout train_dev et évaluation holdout :
 | `artifacts/figures/feature_importance_globale.png` | Importance globale |
 | `artifacts/figures/shap_summary.png`, `shap_client_1.png`, `shap_client_2.png` | Interprétabilité SHAP |
 | `README.md` | Documentation du projet |
+
+---
+
+# PARTIE 2 — Mise en production (10/09/2026)
+
+## Phase 3 : API, conteneurisation, CI/CD
+
+- **API FastAPI** (`api/`) : `POST /predict` (9 champs métier validés Pydantic
+  v2 + dict `features` optionnel, clés inconnues rejetées), `GET /health`,
+  `GET /info`. Modèle chargé **une seule fois** au démarrage (lifespan).
+  Features absentes → NaN (gérés nativement). Seuil métier 0,45 appliqué
+  côté API (décision accorde/refuse).
+- **Tests** : 21 tests pytest (`tests/`) — cas nominaux, 422 (champ manquant,
+  type incorrect, revenu 0, âge ~5 ans, EXT_SOURCE hors [0,1], clé inconnue),
+  chargement unique du modèle, parité ONNX/sklearn, logs écrits en base.
+  **21/21 passés.**
+- **Docker** : `Dockerfile` python:3.12-slim + `requirements-api.txt` minimal
+  + healthcheck `/health`. (Docker non installé sur la machine de dev :
+  build validé statiquement, pipeline CI réalise le build réel.)
+- **CI/CD** : `.github/workflows/ci-cd.yml` — jobs `test` → `docker-build` →
+  `deploy` (main uniquement, smoke tests curl /health + /predict).
+- **Problème rencontré** : dtypes `object` depuis JSON refusés par LightGBM →
+  coercion `pd.to_numeric` (puis remplacée par numpy direct lors de
+  l'optimisation) ; handler 422 Pydantic contenant des ValueError non
+  sérialisables → conversion `ctx` en texte.
+
+## Phase 4 : stockage production, drift, monitoring
+
+- **Stockage** : chaque appel loggé (succès ET 422) dans SQLite
+  `monitoring/data/prod_logs.db` (table `predictions`, 11 colonnes) + miroir
+  JSONL. Captures dans `docs/screenshots/`.
+- **Simulation** : `monitoring/simulate_traffic.py` — 2000 requêtes réelles
+  contre l'API (11,6 s) : 1900 × 200 + 100 × 422 (5,0 %) ; période 2 avec
+  dérive artificielle documentée (AMT_CREDIT ×1,4, EXT_SOURCE_2 −0,08,
+  EXT_SOURCE_3 −0,05, DAYS_BIRTH +1500 j, AMT_INCOME_TOTAL ×0,85).
+  Latence API loguée : moyenne 0,32 ms, p95 0,44 ms. 30,5 % de refus.
+- **Data drift (Evidently 0.7.21)** : `monitoring/drift_analysis.py` →
+  `drift_report.html` + `drift_metrics.json`. Période 1 vs 2 : 6/32 colonnes
+  en dérive — **les 5 features shiftées sont toutes retrouvées** + le score
+  (Wasserstein 0,217). Référence train vs production : 10/31. Détails et
+  points de vigilance dans `monitoring/ANALYSE_DRIFT.md`.
+- **Dashboard** : `monitoring/dashboard.py` (Streamlit) — KPIs, distribution
+  des scores + seuil, latence, erreurs, table des dérives.
+
+## Phase 5 : optimisation de l'inférence
+
+- **Profiling cProfile** : le goulot n'est PAS le modèle mais pandas
+  (coercion = 84 % du temps cumulé).
+- **Benchmarks** (`optimization/benchmarks.json`, médianes 1 prédiction) :
+  API naïve 31,4 ms ; predict_proba sklearn 3,1 ms ; booster bas niveau
+  0,137 ms ; **ONNX Runtime 0,0156 ms (×201)**. Batch 1000 : ONNX 6,3 ms vs
+  sklearn 16,6 ms. Mémoire modèle : +10,8 Mo RSS ; ONNX 32 % plus léger.
+- **Conversion ONNX** (`onnxmltools`, zipmap=False) réussie ; parité
+  max |diff| = 2,3e-7 sur 1000 lignes, 0 décision divergente au seuil 0,45.
+- **Intégration** : `models/model.onnx` devient le moteur principal de l'API
+  (numpy float32 direct), repli automatique skops/booster. Endpoint à chaud :
+  ~26 ms → **~0,8 ms** (×9 de bout en bout). Rapport complet :
+  `optimization/RAPPORT_OPTIMISATION.md`.
+
+## Phase 6 : dépôt Git
+
+- Historique de commits structuré (partie 1 : code, artefacts ; partie 2 :
+  export modèle, API+tests+Docker+CI, monitoring, optimisation, docs).
+- `.gitignore` : données, mlruns/, mlflow.db, logs de production exclus.
+- CSV bruts Kaggle (2,5 Go) déplacés dans `_archive/` (hors dépôt ;
+  restaurer pour rejouer `src/data_preparation.py`).
