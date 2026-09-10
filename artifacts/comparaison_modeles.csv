@@ -1,0 +1,5 @@
+modele,auc_oof,cout_oof,seuil_optimal,accuracy_oof,recall_oof,f1_oof,auc_holdout,cout_holdout,accuracy_holdout,duree_s
+dummy,0.5,198600,0.09,0.9193,0.0,0.0,0.5,49650,0.9193,1.2
+logreg,0.7669,126464,0.53,0.7346,0.6578,0.2858,0.7709,31661,0.7362,94.1
+random_forest,0.7355,137122,0.35,0.7126,0.6284,0.2609,0.7409,34063,0.6983,77.0
+lightgbm,0.782,121965,0.47,0.7313,0.6875,0.2923,0.788,30145,0.7254,62.9
