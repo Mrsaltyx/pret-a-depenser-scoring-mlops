@@ -12,6 +12,11 @@ dashboard de monitoring (Streamlit) et optimisation d'inférence (ONNX)**.
 
 ## Démarrage rapide
 
+**Windows — le plus simple** : double-cliquer sur `lancer_projet.bat`
+(menu : API + dashboard, tests, simulation, analyse de drift, MLflow, arrêt).
+
+Sinon, manuellement :
+
 ```bash
 pip install -r requirements.txt
 
