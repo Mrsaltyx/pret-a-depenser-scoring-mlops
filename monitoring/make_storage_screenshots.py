@@ -5,9 +5,10 @@ Produit dans docs/screenshots/ (matplotlib, dpi=150, sans navigateur) :
                          comptage de lignes et répartition des http_status ;
 - storage_extrait.png  : extrait de 10 lignes réelles de la base
                          (colonnes principales, inputs_json tronqué) ;
-- monitoring_apercu.png: planche de 4 mini-graphiques (distribution des
-                         scores, latence dans le temps, décisions, top
-                         features en dérive) = aperçu du dashboard.
+- monitoring_apercu.png: planche de 5 mini-graphiques (distribution des
+                         scores, latence dans le temps, décisions, taux
+                         d'erreur par paquet de requêtes, top features en
+                         dérive) = aperçu du dashboard.
 
 Usage : python monitoring/make_storage_screenshots.py
 """
@@ -138,12 +139,21 @@ def fig_extrait(logs: pd.DataFrame, chemin: Path) -> None:
 
 
 def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
-    """Planche de 4 mini-graphiques = aperçu du dashboard."""
-    succes = logs[logs["http_status"] == 200]
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+    """Planche de 5 mini-graphiques = aperçu du dashboard.
+
+    Les ids 1..2000 correspondent à la simulation documentée ; les lignes
+    suivantes sont des tests manuels (Swagger/démo). Les graphiques de
+    scores/latence/décisions restent sur la simulation pour coller aux
+    chiffres du rapport ; le taux d'erreur par paquet montre tout, y
+    compris les tests manuels, comme le dashboard.
+    """
+    sim = logs[logs["id"] <= 2000]
+    succes = sim[sim["http_status"] == 200]
+    fig = plt.figure(figsize=(12.8, 8.5))
+    gs = fig.add_gridspec(2, 6, hspace=0.42, wspace=0.32)
 
     # 1. Distribution des scores + seuil
-    ax = axes[0, 0]
+    ax = fig.add_subplot(gs[0, 0:2])
     ax.hist(succes["score"].dropna(), bins=40, color="#4C78A8", edgecolor="white")
     ax.axvline(SEUIL, color="red", linestyle="--", linewidth=2,
                label=f"Seuil métier = {SEUIL}")
@@ -153,8 +163,8 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.legend(fontsize=8)
 
     # 2. Latence dans le temps (moyenne glissante)
-    ax = axes[0, 1]
-    lat = logs.dropna(subset=["latence_ms"])
+    ax = fig.add_subplot(gs[0, 2:4])
+    lat = sim.dropna(subset=["latence_ms"])
     ax.plot(lat["id"], lat["latence_ms"], color="#BBBBBB", linewidth=0.6,
             label="par requête")
     ax.plot(lat["id"], lat["latence_ms"].rolling(50, min_periods=1).mean(),
@@ -165,7 +175,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.legend(fontsize=8)
 
     # 3. Répartition des décisions
-    ax = axes[1, 0]
+    ax = fig.add_subplot(gs[0, 4:6])
     dec = succes["decision"].value_counts()
     couleurs = ["#59A14F" if d == "accorde" else "#E15759" for d in dec.index]
     ax.bar(dec.index, dec.values, color=couleurs)
@@ -175,8 +185,43 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.set_title("Répartition des décisions (succès)")
     ax.set_ylabel("Dossiers")
 
-    # 4. Top features en dérive (comparaison période 1 vs période 2)
-    ax = axes[1, 1]
+    # 4. Taux d'erreur par paquet de requêtes (toute la base)
+    ax = fig.add_subplot(gs[1, 0:3])
+    taille = 200
+    df_err = logs[["id", "http_status"]].copy()
+    df_err["erreur"] = (df_err["http_status"] != 200).astype(int)
+    df_err["paquet"] = (df_err["id"] - 1) // taille
+    par_paquet = (
+        df_err.groupby("paquet")
+        .agg(debut=("id", "min"), fin=("id", "max"),
+             total=("erreur", "size"), erreurs=("erreur", "sum"))
+        .reset_index()
+    )
+    par_paquet["taux_pct"] = par_paquet["erreurs"] / par_paquet["total"] * 100
+    couleurs = ["#E15759" if t > 5 else "#4C78A8" for t in par_paquet["taux_pct"]]
+    ax.bar(range(len(par_paquet)), par_paquet["taux_pct"], color=couleurs)
+    ax.axhline(5, color="gray", linestyle="--", linewidth=1.5,
+               label="cible injectée : 5 %")
+    ax.set_xticks(range(len(par_paquet)))
+    ax.set_xticklabels(
+        [f"{int(r.debut)}–{int(r.fin)}" for r in par_paquet.itertuples()],
+        rotation=45, ha="right", fontsize=7,
+    )
+    ax.set_title(f"Taux d'erreur par paquet de {taille} requêtes")
+    ax.set_ylabel("% d'erreurs (HTTP ≠ 200)")
+    ax.legend(fontsize=8, loc="upper left")
+    dernier = par_paquet.iloc[-1]
+    if dernier["total"] < taille and dernier["taux_pct"] > 10:
+        ax.annotate(
+            "tests manuels Swagger\n(payloads volontairement invalides)",
+            xy=(len(par_paquet) - 1, dernier["taux_pct"]),
+            xytext=(len(par_paquet) / 2 - 0.5, dernier["taux_pct"] * 0.82),
+            fontsize=8, color="#E15759", ha="center", va="center",
+            arrowprops=dict(arrowstyle="->", color="#E15759"),
+        )
+
+    # 5. Top features en dérive (comparaison période 1 vs période 2)
+    ax = fig.add_subplot(gs[1, 3:6])
     colonnes_drift = drift.get("periode1_vs_periode2", {}).get("colonnes", {})
     driftees = sorted(
         ((k, v["drift_score"]) for k, v in colonnes_drift.items() if v["statut_drift"]),
@@ -194,14 +239,13 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
                 ha="center", va="center", transform=ax.transAxes)
         ax.set_title("Colonnes en dérive")
 
-    taux = (len(logs) - len(succes)) / len(logs) * 100
+    taux = (len(sim) - len(succes)) / len(sim) * 100
     fig.suptitle(
-        f"Aperçu du dashboard de monitoring — {len(logs)} requêtes, "
-        f"{taux:.1f} % d'erreurs 422, "
-        f"latence moy. {logs['latence_ms'].mean():.2f} ms",
+        f"Aperçu du dashboard de monitoring — {len(sim)} requêtes simulées : "
+        f"{taux:.1f} % d'erreurs 422, latence moy. {sim['latence_ms'].mean():.2f} ms "
+        f"(+ {len(logs) - len(sim)} tests manuels tracés)",
         fontsize=13, fontweight="bold",
     )
-    fig.tight_layout(rect=[0, 0, 1, 0.96])
     fig.savefig(chemin, dpi=DPI, bbox_inches="tight")
     plt.close(fig)
     print(f"[OK] {chemin}")
