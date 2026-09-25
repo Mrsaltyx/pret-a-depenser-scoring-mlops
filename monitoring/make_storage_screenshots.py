@@ -30,7 +30,7 @@ DOSSIER_SORTIE = RACINE_PROJET / "docs" / "screenshots"
 SEUIL = 0.45
 DPI = 150
 
-plt.rcParams.update({"font.size": 9, "axes.titlesize": 11, "axes.titleweight": "bold"})
+plt.rcParams.update({"font.size": 10, "axes.titlesize": 12, "axes.titleweight": "bold"})
 
 
 def charger() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
@@ -150,7 +150,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     sim = logs[logs["id"] <= 2000]
     succes = sim[sim["http_status"] == 200]
     fig = plt.figure(figsize=(12.8, 8.5))
-    gs = fig.add_gridspec(2, 6, hspace=0.42, wspace=0.32)
+    gs = fig.add_gridspec(2, 6, hspace=0.55, wspace=0.5)
 
     # 1. Distribution des scores + seuil
     ax = fig.add_subplot(gs[0, 0:2])
@@ -160,7 +160,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.set_title("Distribution des scores prédits")
     ax.set_xlabel("Probabilité de défaut")
     ax.set_ylabel("Dossiers")
-    ax.legend(fontsize=8)
+    ax.legend(fontsize=9)
 
     # 2. Latence dans le temps (moyenne glissante)
     ax = fig.add_subplot(gs[0, 2:4])
@@ -172,7 +172,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.set_title("Latence API dans le temps")
     ax.set_xlabel("Requête n°")
     ax.set_ylabel("ms")
-    ax.legend(fontsize=8)
+    ax.legend(fontsize=9)
 
     # 3. Répartition des décisions
     ax = fig.add_subplot(gs[0, 4:6])
@@ -181,12 +181,12 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     ax.bar(dec.index, dec.values, color=couleurs)
     for i, v in enumerate(dec.values):
         ax.text(i, v, f"{v} ({v / len(succes) * 100:.1f} %)", ha="center", va="bottom",
-                fontsize=9)
+                fontsize=10)
     ax.set_title("Répartition des décisions (succès)")
     ax.set_ylabel("Dossiers")
 
     # 4. Taux d'erreur par paquet de requêtes (toute la base)
-    ax = fig.add_subplot(gs[1, 0:3])
+    ax = fig.add_subplot(gs[1, 3:6])
     taille = 200
     df_err = logs[["id", "http_status"]].copy()
     df_err["erreur"] = (df_err["http_status"] != 200).astype(int)
@@ -200,28 +200,29 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
     par_paquet["taux_pct"] = par_paquet["erreurs"] / par_paquet["total"] * 100
     couleurs = ["#E15759" if t > 5 else "#4C78A8" for t in par_paquet["taux_pct"]]
     ax.bar(range(len(par_paquet)), par_paquet["taux_pct"], color=couleurs)
+    ax.margins(x=0.03)
     ax.axhline(5, color="gray", linestyle="--", linewidth=1.5,
                label="cible injectée : 5 %")
     ax.set_xticks(range(len(par_paquet)))
     ax.set_xticklabels(
         [f"{int(r.debut)}–{int(r.fin)}" for r in par_paquet.itertuples()],
-        rotation=45, ha="right", fontsize=7,
+        rotation=45, ha="right", fontsize=8,
     )
     ax.set_title(f"Taux d'erreur par paquet de {taille} requêtes")
     ax.set_ylabel("% d'erreurs (HTTP ≠ 200)")
-    ax.legend(fontsize=8, loc="upper left")
+    ax.legend(fontsize=9, loc="upper left")
     dernier = par_paquet.iloc[-1]
     if dernier["total"] < taille and dernier["taux_pct"] > 10:
         ax.annotate(
             "tests manuels Swagger\n(payloads volontairement invalides)",
             xy=(len(par_paquet) - 1, dernier["taux_pct"]),
             xytext=(len(par_paquet) / 2 - 0.5, dernier["taux_pct"] * 0.82),
-            fontsize=8, color="#E15759", ha="center", va="center",
+            fontsize=9, color="#E15759", ha="center", va="center",
             arrowprops=dict(arrowstyle="->", color="#E15759"),
         )
 
     # 5. Top features en dérive (comparaison période 1 vs période 2)
-    ax = fig.add_subplot(gs[1, 3:6])
+    ax = fig.add_subplot(gs[1, 0:3])
     colonnes_drift = drift.get("periode1_vs_periode2", {}).get("colonnes", {})
     driftees = sorted(
         ((k, v["drift_score"]) for k, v in colonnes_drift.items() if v["statut_drift"]),
@@ -233,7 +234,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
         ax.barh(noms, valeurs, color="#F28E2B")
         ax.set_title("Colonnes en dérive — période 1 vs période 2\n(drift score Evidently)")
         for i, v in enumerate(valeurs):
-            ax.text(v, i, f" {v:.3f}", va="center", fontsize=8)
+            ax.text(v, i, f" {v:.3f}", va="center", fontsize=9)
     else:
         ax.text(0.5, 0.5, "Aucune donnée de drift\n(lancer drift_analysis.py)",
                 ha="center", va="center", transform=ax.transAxes)
@@ -244,7 +245,7 @@ def fig_apercu(logs: pd.DataFrame, drift: dict, chemin: Path) -> None:
         f"Aperçu du dashboard de monitoring — {len(sim)} requêtes simulées : "
         f"{taux:.1f} % d'erreurs 422, latence moy. {sim['latence_ms'].mean():.2f} ms "
         f"(+ {len(logs) - len(sim)} tests manuels tracés)",
-        fontsize=13, fontweight="bold",
+        fontsize=14, fontweight="bold",
     )
     fig.savefig(chemin, dpi=DPI, bbox_inches="tight")
     plt.close(fig)
