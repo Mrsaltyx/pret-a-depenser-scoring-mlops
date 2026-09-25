@@ -133,12 +133,43 @@ with col_b:
 
 # ---------------------------------------------- taux d'erreur dans le temps
 st.subheader("Taux d'erreur dans le temps")
-fenetre = st.slider("Fenêtre glissante (nombre de requêtes)", 50, 500, 200, step=50)
+st.caption(
+    "Une moyenne glissante requête par requête est plate par construction "
+    "(erreurs injectées de façon régulière) : on agrège donc par **paquets "
+    "de requêtes**, bien plus lisible pour repérer les périodes à problème."
+)
+taille = st.slider("Taille d'un paquet (nombre de requêtes)", 50, 500, 100, step=50)
 df_err = logs[["id", "http_status"]].copy()
-df_err["erreur"] = (df_err["http_status"] != 200).astype(float)
-df_err["taux_pct"] = df_err["erreur"].rolling(fenetre, min_periods=1).mean() * 100
-st.line_chart(df_err.set_index("id")[["taux_pct"]])
-st.caption(f"Taux d'erreur (%) glissant sur {fenetre} requêtes — cible injectée : 5 %.")
+df_err["erreur"] = (df_err["http_status"] != 200).astype(int)
+df_err["paquet"] = (df_err["id"] - 1) // taille
+par_paquet = (
+    df_err.groupby("paquet")
+    .agg(debut=("id", "min"), fin=("id", "max"), total=("erreur", "size"), erreurs=("erreur", "sum"))
+    .reset_index()
+)
+par_paquet["taux_pct"] = par_paquet["erreurs"] / par_paquet["total"] * 100
+fig3, ax3 = plt.subplots(figsize=(9.5, 3.2))
+couleurs = ["#E15759" if t > 5 else "#4C78A8" for t in par_paquet["taux_pct"]]
+ax3.bar(range(len(par_paquet)), par_paquet["taux_pct"], color=couleurs)
+ax3.axhline(5, color="gray", linestyle="--", linewidth=1.5, label="cible injectée : 5 %")
+ax3.set_xticks(range(len(par_paquet)))
+ax3.set_xticklabels(
+    [f"{int(r.debut)}–{int(r.fin)}" for r in par_paquet.itertuples()],
+    rotation=45, ha="right", fontsize=8,
+)
+ax3.set_ylabel("% d'erreurs (HTTP ≠ 200)")
+ax3.set_xlabel("Requêtes (par ordre d'arrivée)")
+ax3.legend()
+fig3.tight_layout()
+st.pyplot(fig3)
+plt.close(fig3)
+dernier = par_paquet.iloc[-1]
+if dernier["total"] < taille and dernier["taux_pct"] > 10:
+    st.caption(
+        f"🔎 Pic final normal : les requêtes {int(dernier['debut'])}–{int(dernier['fin'])} "
+        f"sont des tests manuels (Swagger/démo) avec des payloads volontairement invalides — "
+        f"{dernier['taux_pct']:.0f} % d'erreurs sur ce petit paquet."
+    )
 
 st.divider()
 
